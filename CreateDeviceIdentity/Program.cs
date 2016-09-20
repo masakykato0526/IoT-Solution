@@ -10,12 +10,19 @@ namespace CreateDeviceIdentity
     class Program
     {
         static RegistryManager registryManager;
+        // iothubownerの接続文字列
         static string connectString = "HostName=mkiothub01.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=fGFNhgX6eeJq3BM8epN/sQ8K2vahGlAO1Exo0cUKf+k=";
-
+        
         static void Main(string[] args)
         {
-            registryManager = RegistryManager.CreateFromConnectionString(connectString);
-            AddDeviceAsync().Wait();
+            try
+            {
+                registryManager = RegistryManager.CreateFromConnectionString(connectString);
+                AddDeviceAsync().Wait();
+            } catch (Exception ex)
+            {
+                Console.WriteLine("Exception: {0}", ex.Message);
+            }
 
             Console.ReadLine();
         }
@@ -23,11 +30,11 @@ namespace CreateDeviceIdentity
         private static async Task AddDeviceAsync()
         {
             string deviceId = "MKDevice02";
-            Device device;
+            Device device = new Device(deviceId);
 
             try
             {
-                device = await registryManager.AddDeviceAsync(new Device(deviceId));
+                device = await registryManager.AddDeviceAsync(device);
             }
             catch (DeviceAlreadyExistsException)
             {

@@ -1,28 +1,28 @@
-﻿using System;
+﻿using Microsoft.Azure.Devices.Client;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Azure.Devices.Client;
-using Newtonsoft.Json;
 
-namespace SimulatedDevice
+namespace SimulatedX509Device
 {
     class Program
     {
         static DeviceClient deviceClient;
         static string iotHubUri = "mkiothub01.azure-devices.net";
-        static string deviceKey = "MHYnxSsE1DeUB0XuDTBDjakE+cOASdMEXKhJ3eNrll4="; 
 
         static void Main(string[] args)
         {
             Console.WriteLine("Simulated device\n.");
 
-            // AMQPプロトコルでの接続
-            deviceClient = DeviceClient.Create(iotHubUri, new DeviceAuthenticationWithRegistrySymmetricKey("MKDevice01", deviceKey));
-            // HTTPプロトコルでの接続
-            //deviceClient = DeviceClient.Create(iotHubUri, new DeviceAuthenticationWithRegistrySymmetricKey("MKDevice01", deviceKey), TransportType.Http1    );
-
+            // AMQPプロトコルでの接続    
+            String cerFilePath = @"C:\temp\azuretest.cer";
+            X509Certificate2 x509Certificate = new X509Certificate2(cerFilePath);
+            var authMethod = new DeviceAuthenticationWithX509Certificate("MKDevice02", x509Certificate);
+            deviceClient = DeviceClient.Create(iotHubUri, authMethod);
             SendDeviceToCloudMessagesAsync();
             Console.ReadLine();
         }
@@ -38,7 +38,7 @@ namespace SimulatedDevice
 
                 var telemetryDataPoint = new
                 {
-                    deviceId = "MKDevice01",
+                    deviceId = "MKDevice02",
                     windSpeed = currentWindSpeed
                 };
 

@@ -9,6 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadDeviceToCloudMessages",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulatedDevice", "SimulatedDevice\SimulatedDevice.csproj", "{7A986FDB-DB5A-46EA-98AC-A07409F01885}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoveDeviceIdentity", "RemoveDeviceIdentity\RemoveDeviceIdentity.csproj", "{CC8C4766-B46F-4FDE-A374-C76E0A3219F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateX509DeviceIdentity", "CreateX509DeviceIdentity\CreateX509DeviceIdentity.csproj", "{218C0347-2EBB-4DE2-8928-4B74311DC36F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulatedX509Device", "SimulatedX509Device\SimulatedX509Device.csproj", "{DC9C1680-CB5D-4128-97CF-F5E302176066}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +33,18 @@ Global
 		{7A986FDB-DB5A-46EA-98AC-A07409F01885}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A986FDB-DB5A-46EA-98AC-A07409F01885}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A986FDB-DB5A-46EA-98AC-A07409F01885}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC8C4766-B46F-4FDE-A374-C76E0A3219F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC8C4766-B46F-4FDE-A374-C76E0A3219F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC8C4766-B46F-4FDE-A374-C76E0A3219F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC8C4766-B46F-4FDE-A374-C76E0A3219F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{218C0347-2EBB-4DE2-8928-4B74311DC36F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{218C0347-2EBB-4DE2-8928-4B74311DC36F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{218C0347-2EBB-4DE2-8928-4B74311DC36F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{218C0347-2EBB-4DE2-8928-4B74311DC36F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC9C1680-CB5D-4128-97CF-F5E302176066}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC9C1680-CB5D-4128-97CF-F5E302176066}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC9C1680-CB5D-4128-97CF-F5E302176066}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC9C1680-CB5D-4128-97CF-F5E302176066}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
