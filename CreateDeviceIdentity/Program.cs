@@ -29,7 +29,7 @@ namespace CreateDeviceIdentity
 
         private static async Task AddDeviceAsync()
         {
-            string deviceId = "MKDevice02";
+            string deviceId = "MKDevice03";
             Device device = new Device(deviceId);
 
             try

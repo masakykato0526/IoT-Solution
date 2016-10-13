@@ -37,7 +37,7 @@ namespace CreateX509DeviceIdentity
                 /*
                   証明書は以下のPowerShellコマンドにて作成
                    New-SelfSignedCertificate -CertStoreLocation "Cert:\CurrentUser\My" -Subject "Azure Test Cert"
-                   // Thumbprint C66C92DEF8A7AD4FA2665B13FD422227C6F078A1の証明書が作成
+                   // Thumbprint 2C886CEBD45B98D9D353329F5F6E7AFB42812F00の証明書が作成
                    Get-ChildItem Cert:\CurrentUser\My
                    // 証明書一覧の確認
                    Export-Certificate -Cert cert:\CurrentUser\my\C66C92DEF8A7AD4FA2665B13FD422227C6F078A1 -FilePath C:\temp\azuretest.cer
@@ -47,7 +47,7 @@ namespace CreateX509DeviceIdentity
                     X509Thumbprint = new X509Thumbprint()
                     {
                         //PrimaryThumbprint = "921BC9694ADEB8929D4F7FE4B9A3A6DE58B0790B"
-                        PrimaryThumbprint = "C66C92DEF8A7AD4FA2665B13FD422227C6F078A1"
+                        PrimaryThumbprint = "2C886CEBD45B98D9D353329F5F6E7AFB42812F00"
                     }
                 }
             };

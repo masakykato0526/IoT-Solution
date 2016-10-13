@@ -19,10 +19,12 @@ namespace SimulatedX509Device
             Console.WriteLine("Simulated device\n.");
 
             // AMQPプロトコルでの接続    
-            String cerFilePath = @"C:\temp\azuretest.cer";
+            String cerFilePath = @"C:\Workspace\certification\azuretest.cer";
             X509Certificate2 x509Certificate = new X509Certificate2(cerFilePath);
             var authMethod = new DeviceAuthenticationWithX509Certificate("MKDevice02", x509Certificate);
+
             deviceClient = DeviceClient.Create(iotHubUri, authMethod);
+
             SendDeviceToCloudMessagesAsync();
             Console.ReadLine();
         }
