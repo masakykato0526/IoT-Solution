@@ -8,16 +8,21 @@ using System;
 
 namespace ReadDeviceToCloudMessages
 {
+    /*
+        デバイスから受信 - チュートリアルからの変更なし
+    */
     class Program
     {
-        static string connectionString = "HostName=mkiothub01.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=fGFNhgX6eeJq3BM8epN/sQ8K2vahGlAO1Exo0cUKf+k=";
+        // IoT Hubへの接続文字列
+        static string connectionString = "<IoT接続文字列>";
+
+        // D2Cエンドポイントの相対パスの指定
         static string iotHubD2cEndpoint = "messages/events";
+
         static EventHubClient eventHubClient;
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Reveive message.Ctrl - C to exit.\n");
-
             eventHubClient = EventHubClient.CreateFromConnectionString(connectionString, iotHubD2cEndpoint);
             var d2cPartitions = eventHubClient.GetRuntimeInformation().PartitionIds;
             CancellationTokenSource cts = new CancellationTokenSource();
@@ -26,7 +31,7 @@ namespace ReadDeviceToCloudMessages
             {
                 e.Cancel = true;
                 cts.Cancel();
-                Console.WriteLine("Exiting...");
+                Console.WriteLine("終了中...");
             };
 
             var tasks = new List<Task>();
@@ -49,7 +54,7 @@ namespace ReadDeviceToCloudMessages
                 if (eventData == null) continue;
 
                 string data = Encoding.UTF8.GetString(eventData.GetBytes());
-                Console.WriteLine("Message received. Partition: {0} Data: '{1}'", partition, data);
+                Console.WriteLine("受信メッセージ： パーティション：{0}  データ：'{1}'", partition, data);
             }
         }
     }

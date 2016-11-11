@@ -10,41 +10,63 @@ namespace SimulatedDevice
     class Program
     {
         static DeviceClient deviceClient;
-        static string iotHubUri = "mkiothub01.azure-devices.net";
-        static string deviceKey = "MHYnxSsE1DeUB0XuDTBDjakE+cOASdMEXKhJ3eNrll4=";
 
-        static string policyName = "iothubowner";
-        static string sharedAccessKey = "fGFNhgX6eeJq3BM8epN/sQ8K2vahGlAO1Exo0cUKf+k=";
-        static string ttlPeriod = "5";
+        // 接続するIoT Hub
+        static string iotHubUri = "<IoT Hubホスト名";
 
+        // デバイスID
+        static string deviceId = "<デバイスID>";
+      
+        // 共有アクセスポリシーとアクセスキー
+        static string policyName = "<共有アクセスポリシー>";
+        static string sharedAccessKey = "<アクセスキー>";
+        
+        // セキュリティトークンの有効期間
+        static string ttlDay = "<有効期間>"; //日
+
+        // デバイスキー
+        //static string deviceKey = "<デバイスキー>";
+    
         static void Main(string[] args)
         {
-            Console.WriteLine("Simulated device\n.");
+            // SASトークンを使用して、HTTPプロトコルで接続するDeviceClientインスタンスを作成
+            var authMethod = new DeviceAuthenticationWithToken(deviceId, CreateSASToken());
 
-            // デバイスIDの対象キーを私用してトークンを生成
-            // AMQPプロトコルでの接続
-            //deviceClient = DeviceClient.Create(iotHubUri, new DeviceAuthenticationWithRegistrySymmetricKey("MKDevice01", deviceKey));
-            // HTTPプロトコルでの接続
-            //deviceClient = DeviceClient.Create(iotHubUri, new DeviceAuthenticationWithRegistrySymmetricKey("MKDevice01", deviceKey), TransportType.Http1    );
+            deviceClient = DeviceClient.Create(iotHubUri, authMethod, TransportType.Http1);
 
-            // カスタムでShared Access Signatureトークンを生成
-            deviceClient = DeviceClient.Create(iotHubUri, new DeviceAuthenticationWithToken("MKDevice01", CreateSASToken()));
-            
+            /*
+            // SASトークンを使用して、AMQPプロトコルで接続するDeviceClientインスタンスを作成
+            var authMethod = new DeviceAuthenticationWithToken(deviceId, CreateSASToken());
+            deviceClient = DeviceClient.Create(iotHubUri, authMethod);
+
+            // SASトークンを使用して、MQTTプロトコルで接続するDeviceClientインスタンスを作成
+            var authMethod = new DeviceAuthenticationWithToken(deviceId, CreateSASToken());
+            deviceClient = DeviceClient.Create(iotHubUri, authMethod, TransportType.Mqtt);
+
+            // デバイスキーを使用して、AMQPプロトコルで接続するDeviceClientインスタンスを作成
+            //deviceClient = DeviceClient.Create(iotHubUri, new DeviceAuthenticationWithRegistrySymmetricKey(deviceId, deviceKey));
+            */
+
+            // メッセージの送信処理
             SendDeviceToCloudMessagesAsync();
+
             Console.ReadLine();
         }
 
         static string CreateSASToken()
         {
+            // SASトークンを生成
             var sasToken = new SharedAccessSignatureBuilder()
             {
                 KeyName = policyName,
                 Key = sharedAccessKey,
-                Target = iotHubUri,
-                TimeToLive = TimeSpan.FromDays(Convert.ToDouble(ttlPeriod))
+                Target = iotHubUri + "/devices/" + deviceId,
+                TimeToLive = TimeSpan.FromDays(Convert.ToDouble(ttlDay))
             }.ToSignature();
 
-            Console.WriteLine("SAS: {0}", sasToken);
+            Console.WriteLine("生成されたSASトークン： {0}", sasToken);
+            Console.WriteLine();
+
             return sasToken;
         }
 
@@ -59,15 +81,15 @@ namespace SimulatedDevice
 
                 var telemetryDataPoint = new
                 {
-                    deviceId = "MKDevice01",
+                    deviceId = deviceId,
                     windSpeed = currentWindSpeed
                 };
 
-                 var messageString = JsonConvert.SerializeObject(telemetryDataPoint);
+                var messageString = JsonConvert.SerializeObject(telemetryDataPoint);
                 var message = new Message(Encoding.ASCII.GetBytes(messageString));
 
                 await deviceClient.SendEventAsync(message);
-                Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, messageString);
+                Console.WriteLine("{0} > 送信メッセージ： {1}", DateTime.Now, messageString);
 
                 Task.Delay(1000).Wait();
 

@@ -1,8 +1,6 @@
 ﻿using Microsoft.Azure.Devices.Client;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,20 +10,27 @@ namespace SimulatedX509Device
     class Program
     {
         static DeviceClient deviceClient;
-        static string iotHubUri = "mkiothub01.azure-devices.net";
+
+        // 接続するIoT Hub
+        static string iotHubUri = "<IoT Hubホスト名>";
+
+        // 送信するデバイスID
+        static string deviceId = "<デバイスID>";
+
+        // X.509証明書
+        static string cerFilePath = @"<X.509証明書へのパス>";
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Simulated device\n.");
+            // X.509証明書を使用して、HTTPプロトコルで接続するDeviceClientインスタンスを作成
+            var x509Certificate = new X509Certificate2(cerFilePath);
+            var authMethod = new DeviceAuthenticationWithX509Certificate(deviceId, x509Certificate);
 
-            // AMQPプロトコルでの接続    
-            String cerFilePath = @"C:\Workspace\certification\azuretest.cer";
-            X509Certificate2 x509Certificate = new X509Certificate2(cerFilePath);
-            var authMethod = new DeviceAuthenticationWithX509Certificate("MKDevice02", x509Certificate);
+            deviceClient = DeviceClient.Create(iotHubUri, authMethod, TransportType.Http1);
 
-            deviceClient = DeviceClient.Create(iotHubUri, authMethod);
-
+            // メッセージの送信処理
             SendDeviceToCloudMessagesAsync();
+
             Console.ReadLine();
         }
 
@@ -40,7 +45,7 @@ namespace SimulatedX509Device
 
                 var telemetryDataPoint = new
                 {
-                    deviceId = "MKDevice02",
+                    deviceId = deviceId,
                     windSpeed = currentWindSpeed
                 };
 
@@ -48,7 +53,7 @@ namespace SimulatedX509Device
                 var message = new Message(Encoding.ASCII.GetBytes(messageString));
 
                 await deviceClient.SendEventAsync(message);
-                Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, messageString);
+                Console.WriteLine("{0} > 送信メッセージ： {1}", DateTime.Now, messageString);
 
                 Task.Delay(1000).Wait();
 

@@ -8,11 +8,17 @@ using Microsoft.Azure.Devices.Common.Exceptions;
 
 namespace RemoveDeviceIdentity
 {
+    /*
+        デバイスIDを指定してデバイスを削除
+    */
     class Program
     {
         static RegistryManager registryManager;
-        // iothubownerの接続文字列
-        static string connectString = "HostName=mkiothub01.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=fGFNhgX6eeJq3BM8epN/sQ8K2vahGlAO1Exo0cUKf+k=";
+        // 削除するデバイスID
+        static string deviceId = "<デバイスID>";
+
+        // IoT Hubへの接続文字列
+        static string connectString = "<IoT Hub接続文字列>";
 
         static void Main(string[] args)
         {
@@ -24,12 +30,10 @@ namespace RemoveDeviceIdentity
 
         private static async Task RemoveDeviceAsync()
         {
-            string deviceId = "MKDevice02";
-
             try
             {
                 await registryManager.RemoveDeviceAsync(deviceId);
-                Console.WriteLine("Device {0} is removed", deviceId);
+                Console.WriteLine("デバイス {0} は削除されました", deviceId);
             }
             catch (Exception ex)
             {
